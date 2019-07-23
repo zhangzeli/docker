@@ -1,3 +1,6 @@
+
+
+# 1 Images
 ## About Docker Images
 ```
 Docker镜像含有启动容器所需的文件系统，因此，其用于创建并且启动docker容器
@@ -16,6 +19,43 @@ Docker镜像含有启动容器所需的文件系统，因此，其用于创建�
 ```
 ![image图](../_img/2/image_layer.jpg)
 
+# 2 FS
+## Aufs
++ advanced multi-layered unification filesystem: 高级多层统一文件系统
++ 用于Linux 文件系统实现“联合挂载”
++ aufs 是之前的UnionFS的重新实现，2006年由Junjiro Okajima开发
++ aufs 的竞争产品是overlayfs,后者自从３.18版本开始被合并到Linux内核
++ docker的分层镜像，除了aufs，docker还支持btrfs,devicemapper和vfs等
+
+>在Ubuntu系统下，docker默认aufs，而在Centos7上，用的是devicemapper；
+
+## Devicemapper
+
+# 3 Registry
+## Docker Registry
++ 启动容器时，docker daemon 会试图从本地获取相关的镜像；本地镜像不存在时，其将从Registry中下载该镜像并且保存到本地
+![Docker 获取镜像](../_img/2/registry.png)
+
+## Docker Registry分类
++ Registry 用于保存docker镜像，包括镜像的层次结构和元数据
++ 用户可自建Registry,也可以使用官方Docker Hub
++ 分类
+    Sponsor
+    Mirror
+    Vendor
+    Private
+
+## Registry（repository and index）
+```
+由某特定的docker镜像的所有迭代版本组成的镜像仓库
+一个Registry中可以存在多个Repository
+  Repository可以分为“顶层仓库”和“用户仓库”
+  用户仓库的格式为“用户名/仓库名”
+每个仓库可以包含对个Tag,每个标签对应一个镜像
+
+维护用户账户，镜像的校验以及公共命名空间的信息
+相当于为Registry提供了一个完成用户认证等功能的检索接口
+```
 
 ## Docker Hub
 + Docker Hub provides the following major features
@@ -37,14 +77,24 @@ docker pull quay.io/coreos/flannel:v0.10.0-amd64
     - 基于容器制作
     - 基于DockerFile
     - Docker Hub automated builds
+
 ```
 docker commit [OPTIONS] CONTAINER [REPOSITORY[:TAG]]
+
+eg:
+    docker tag 5ebc16572ed8 zzl/httpd:v0.1-1
 
 1.启动容器
     docker run --name zb1 -it busybox
 2.制作镜像
-    docker commit -a "zhangzeli<853089986@qq.com>" -c 'CMD ["/bin/httpd","-f","-h","/data/html"]' -p zb1 zzl/httpd:v0.2
+    docker commit -a "zzl<853089986@qq.com>" -c 'CMD ["/bin/httpd","-f","-h","/data/html"]' -p zb1 zzl/httpd:v0.2
+3.将镜像放到远程
+    docker login
+    docker push
 ```
+![docker tag](../_img/2/docker-tag.png)
+
+
 
 ## 镜像的导入和导出
 ```
