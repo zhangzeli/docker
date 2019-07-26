@@ -14,6 +14,9 @@
             配置文件：/etc/docker/daemon.json
 
 ```
+修改协议
+[官方手册](https://docs.docker.com/engine/reference/commandline/dockerd/)
+
 
 
 ## DOCKER镜像加速
